@@ -12,7 +12,8 @@ import (
 
 type AzureProvider struct {
 	*ProviderData
-	Tenant string
+	Tenant         string
+	GroupValidator func(*SessionState) bool
 }
 
 func NewAzureProvider(p *ProviderData) *AzureProvider {
@@ -36,7 +37,14 @@ func NewAzureProvider(p *ProviderData) *AzureProvider {
 		p.Scope = "openid"
 	}
 
-	return &AzureProvider{ProviderData: p}
+	return &AzureProvider{
+		ProviderData: p,
+		// Set the default group validator to allow any group. It will be overwritten by a
+		// specific validator when group restriction is configured.
+		GroupValidator: func(s *SessionState) bool {
+			return true
+		},
+	}
 }
 
 func (p *AzureProvider) Configure(tenant string) {
@@ -121,4 +129,14 @@ func (p *AzureProvider) GetEmailAddress(s *SessionState) (string, error) {
 	}
 
 	return email, err
+}
+
+// SetGroupRestriction configures the AzureProvider to restrict access to the specified groups.
+func (p *AzureProvider) SetGroupRestriction(groups []string) {
+
+}
+
+// ValidateGroup validates that the user provided in the SessionState is a member of the configured groups.
+func (p *AzureProvider) ValidateGroup(s *SessionState) bool {
+	return p.GroupValidator(s)
 }
