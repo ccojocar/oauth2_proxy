@@ -31,6 +31,7 @@ type Options struct {
 
 	AuthenticatedEmailsFile  string   `flag:"authenticated-emails-file" cfg:"authenticated_emails_file"`
 	AzureTenant              string   `flag:"azure-tenant" cfg:"azure_tenant"`
+	AzureGroups              []string `flag:"azure-groups" cfg:"azure_groups"`
 	EmailDomains             []string `flag:"email-domain" cfg:"email_domains"`
 	GitHubOrg                string   `flag:"github-org" cfg:"github_org"`
 	GitHubTeam               string   `flag:"github-team" cfg:"github_team"`
@@ -261,6 +262,9 @@ func parseProviderInfo(o *Options, msgs []string) []string {
 	switch p := o.provider.(type) {
 	case *providers.AzureProvider:
 		p.Configure(o.AzureTenant)
+		if len(o.AzureGroups) > 0 {
+			p.SetGroupsRestriction(o.AzureGroups)
+		}
 	case *providers.GitHubProvider:
 		p.SetOrgTeam(o.GitHubOrg, o.GitHubTeam)
 	case *providers.GoogleProvider:

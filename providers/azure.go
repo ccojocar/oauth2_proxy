@@ -131,8 +131,8 @@ func (p *AzureProvider) GetEmailAddress(s *SessionState) (string, error) {
 	return email, err
 }
 
-// SetGroupRestriction configures the AzureProvider to restrict access to the specified groups.
-func (p *AzureProvider) SetGroupRestriction(groups []string) {
+// SetGroupsRestriction configures the AzureProvider to restrict access to the specified groups.
+func (p *AzureProvider) SetGroupsRestriction(groups []string) {
 
 }
 
