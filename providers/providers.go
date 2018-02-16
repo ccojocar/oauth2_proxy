@@ -9,7 +9,7 @@ type Provider interface {
 	GetEmailAddress(*SessionState) (string, error)
 	GetUserName(*SessionState) (string, error)
 	Redeem(string, string) (*SessionState, error)
-	ValidateGroup(string) bool
+	ValidateGroup(*SessionState) bool
 	ValidateSessionState(*SessionState) bool
 	GetLoginURL(redirectURI, finalRedirect string) string
 	RefreshSessionIfNeeded(*SessionState) (bool, error)

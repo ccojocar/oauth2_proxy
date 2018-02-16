@@ -110,16 +110,18 @@ func TestGoogleProviderValidateGroup(t *testing.T) {
 	p.GroupValidator = func(email string) bool {
 		return email == "michael.bland@gsa.gov"
 	}
-	assert.Equal(t, true, p.ValidateGroup("michael.bland@gsa.gov"))
+	s := &SessionState{Email: "michael.bland@gsa.gov"}
+	assert.Equal(t, true, p.ValidateGroup(s))
 	p.GroupValidator = func(email string) bool {
 		return email != "michael.bland@gsa.gov"
 	}
-	assert.Equal(t, false, p.ValidateGroup("michael.bland@gsa.gov"))
+	assert.Equal(t, false, p.ValidateGroup(s))
 }
 
 func TestGoogleProviderWithoutValidateGroup(t *testing.T) {
 	p := newGoogleProvider()
-	assert.Equal(t, true, p.ValidateGroup("michael.bland@gsa.gov"))
+	s := &SessionState{Email: "michael.bland@gsa.gov"}
+	assert.Equal(t, true, p.ValidateGroup(s))
 }
 
 //
